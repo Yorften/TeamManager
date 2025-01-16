@@ -4,45 +4,45 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+
+
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+/**
+ * Represents a Role entity in the application.
+ */
+@Entity
+@Getter
+@Setter
 @AllArgsConstructor
-@Data
 @NoArgsConstructor
 @Builder
+@Table(name = "roles")
 @SQLRestriction("removed_at IS NULL")
-@Entity(name = "users")
-public class User {
-
+@SQLDelete(sql = "UPDATE roles SET removed_at = CURRENT_TIMESTAMP WHERE id=?")
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
-
-    private String password;
-
-    @Builder.Default
-    private boolean enabled = true;
-
-    @Column(unique = true)
-    private String email;
+    @Column(unique =  true)
+    private String name;
 
     @CreationTimestamp
     @Column(updatable = false, nullable = false)
@@ -54,10 +54,9 @@ public class User {
 
     @Column(nullable = true)
     private LocalDateTime removedAt;
-
+    
     @Builder.Default
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
 
 }
