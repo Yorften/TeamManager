@@ -4,6 +4,8 @@ server:
 logging:
   file:
     path: logs
+    max-size: 1MB
+    max-history: 7
 
 security:
   jwt:
