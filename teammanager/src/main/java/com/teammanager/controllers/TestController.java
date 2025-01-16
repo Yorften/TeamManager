@@ -5,10 +5,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.teammanager.model.User;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/test")
+@Slf4j
 public class TestController {
 
     private User user = new User(); 
