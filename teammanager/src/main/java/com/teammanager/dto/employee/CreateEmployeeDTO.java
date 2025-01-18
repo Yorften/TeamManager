@@ -18,6 +18,10 @@ public class CreateEmployeeDTO {
     @Size(min = 5, max = 100, message = "Job title must be between 5 and 100 characters")
     private String jobTitle;
 
+    @NotNull(message = "Department is required")
+    @Size(min = 5, max = 100, message = "Employee name must be between 5 and 100 characters")
+    private String department;
+
     @NotNull(message = "Hire date is required")
     private LocalDate hireDate;
 

@@ -1,35 +1,35 @@
 package com.teammanager.specification;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.jpa.domain.Specification;
 
+import com.teammanager.dto.employee.EmployeeCriteria;
 import com.teammanager.model.Employee;
+
+import jakarta.persistence.criteria.Predicate;
 
 public class EmployeeSpecification {
 
-    public static Specification<Employee> searchByFullName(String term) {
-        return (root, query, criteriaBuilder) -> {
-            String pattern = "%" + term.toLowerCase() + "%";
-            return criteriaBuilder.like(criteriaBuilder.lower(root.get("fullName")), pattern);
-        };
-    }
+    public static Specification<Employee> withFilters(EmployeeCriteria criteria) {
+        return (root, query, builder) -> {
+            List<Predicate> predicates = new ArrayList<>();
 
-    public static Specification<Employee> searchByDepartment(String term) {
-        return (root, query, criteriaBuilder) -> {
-            String pattern = "%" + term.toLowerCase() + "%";
-            return criteriaBuilder.like(criteriaBuilder.lower(root.get("department")), pattern);
-        };
-    }
+            if (criteria.getId() != null) {
+                predicates.add(builder.equal(root.get("id"), criteria.getId()));
+            }
+            if (criteria.getFullName() != null) {
+                predicates.add(builder.like(root.get("fullName"), "%" + criteria.getFullName() + "%"));
+            }
+            if (criteria.getDepartment() != null) {
+                predicates.add(builder.like(root.get("department"), "%" + criteria.getDepartment() + "%"));
+            }
+            if (criteria.getJobTitle() != null) {
+                predicates.add(builder.equal(root.get("jobTitle"), criteria.getJobTitle()));
+            }
 
-    public static Specification<Employee> searchByJobTitle(String term) {
-        return (root, query, criteriaBuilder) -> {
-            String pattern = "%" + term.toLowerCase() + "%";
-            return criteriaBuilder.like(criteriaBuilder.lower(root.get("jobTitle")), pattern);
-        };
-    }
-
-    public static Specification<Employee> searchById(Long employeeId) {
-        return (root, query, criteriaBuilder) -> {
-            return criteriaBuilder.equal(root.get("id"), employeeId);
+            return builder.and(predicates.toArray(new Predicate[0]));
         };
     }
 }
