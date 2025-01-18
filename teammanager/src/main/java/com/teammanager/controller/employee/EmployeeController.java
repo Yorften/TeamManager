@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,7 +64,9 @@ public class EmployeeController {
     public EmployeeDTO updateEmployeeDTO(
             @RequestBody @Valid UpdateEmployeeDTO updateEmployeeDTO,
             @PathVariable("id") Long employeeId) {
-        return employeeService.updateEmployee(employeeId, updateEmployeeDTO);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return employeeService.updateEmployee(employeeId, updateEmployeeDTO, authentication);
     }
 
     @DeleteMapping("/{id}")
