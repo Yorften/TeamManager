@@ -3,6 +3,9 @@ package com.teammanager.service.implementation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.teammanager.dto.employee.EmployeeCriteria;
@@ -11,7 +14,9 @@ import com.teammanager.dto.employee.UpdateEmployeeDTO;
 import com.teammanager.exception.ResourceNotFoundException;
 import com.teammanager.mapper.EmployeeMapper;
 import com.teammanager.model.Employee;
+import com.teammanager.model.User;
 import com.teammanager.repository.EmployeeRepository;
+import com.teammanager.repository.UserRepository;
 import com.teammanager.service.interfaces.EmployeeService;
 import com.teammanager.specification.EmployeeSpecification;
 
@@ -28,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-
+    private final UserRepository userRepository;
     private final EmployeeMapper employeeMapper;
 
     @Override
@@ -83,29 +88,62 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO updateEmployee(Long employeeId, UpdateEmployeeDTO employeeDTO, String... with) {
+
         Employee employeeDB = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
 
-        if (employeeDTO.getFullName() != null && !employeeDTO.getFullName().isEmpty()) {
-            employeeDB.setFullName(employeeDTO.getFullName());
-        }
-        if (employeeDTO.getJobTitle() != null && !employeeDTO.getJobTitle().isEmpty()) {
-            employeeDB.setJobTitle(employeeDTO.getJobTitle());
-        }
-        if (employeeDTO.getDepartment() != null && !employeeDTO.getDepartment().isEmpty()) {
-            employeeDB.setDepartment(employeeDTO.getDepartment());
-        }
-        if (employeeDTO.getContactInformation() != null && !employeeDTO.getContactInformation().isEmpty()) {
-            employeeDB.setContactInformation(employeeDTO.getContactInformation());
-        }
-        if (employeeDTO.getAddress() != null && !employeeDTO.getAddress().isEmpty()) {
-            employeeDB.setAddress(employeeDTO.getAddress());
-        }
-        if (employeeDTO.getHireDate() != null) {
-            employeeDB.setHireDate(employeeDTO.getHireDate());
-        }
-        if (employeeDTO.getEmploymentStatus() != null) {
-            employeeDB.setEmploymentStatus(employeeDTO.getEmploymentStatus());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Employee managerEmployee = null;
+
+        if (authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_MANAGER"))) {
+            User authUser = userRepository.findByUsername(authentication.getName())
+                    .orElseThrow(() -> new ResourceNotFoundException("Authenticated user not found"));
+
+            managerEmployee = employeeRepository.findByUserId(authUser.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Manager's employee details not found"));
+
+            if (!managerEmployee.getDepartment().equals(employeeDB.getDepartment())) {
+                throw new AccessDeniedException("Managers can only update employees within their department.");
+            }
+
+            if (employeeDTO.getContactInformation() != null && !employeeDTO.getContactInformation().isEmpty()) {
+                employeeDB.setContactInformation(employeeDTO.getContactInformation());
+            }
+            if (employeeDTO.getAddress() != null && !employeeDTO.getAddress().isEmpty()) {
+                employeeDB.setAddress(employeeDTO.getAddress());
+            }
+            if (employeeDTO.getHireDate() != null) {
+                employeeDB.setHireDate(employeeDTO.getHireDate());
+            }
+            if (employeeDTO.getEmploymentStatus() != null) {
+                employeeDB.setEmploymentStatus(employeeDTO.getEmploymentStatus());
+            }
+        } else {
+
+            if (employeeDTO.getFullName() != null && !employeeDTO.getFullName().isEmpty()) {
+                employeeDB.setFullName(employeeDTO.getFullName());
+            }
+            if (employeeDTO.getJobTitle() != null && !employeeDTO.getJobTitle().isEmpty()) {
+                employeeDB.setJobTitle(employeeDTO.getJobTitle());
+            }
+            if (employeeDTO.getDepartment() != null && !employeeDTO.getDepartment().isEmpty()) {
+                employeeDB.setDepartment(employeeDTO.getDepartment());
+            }
+            if (employeeDTO.getContactInformation() != null && !employeeDTO.getContactInformation().isEmpty()) {
+                employeeDB.setContactInformation(employeeDTO.getContactInformation());
+            }
+            if (employeeDTO.getAddress() != null && !employeeDTO.getAddress().isEmpty()) {
+                employeeDB.setAddress(employeeDTO.getAddress());
+            }
+            if (employeeDTO.getHireDate() != null) {
+                employeeDB.setHireDate(employeeDTO.getHireDate());
+            }
+            if (employeeDTO.getEmploymentStatus() != null) {
+                employeeDB.setEmploymentStatus(employeeDTO.getEmploymentStatus());
+            }
+
         }
 
         return employeeMapper.convertToDTO(employeeRepository.save(employeeDB));

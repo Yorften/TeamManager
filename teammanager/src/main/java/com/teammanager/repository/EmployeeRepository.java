@@ -15,6 +15,8 @@ import com.teammanager.model.Employee;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSpecificationExecutor<Employee> {
 
-    Optional<Employee> findByFullName(String userName);
+    Optional<Employee> findByFullName(String fullName);
+
+    Optional<Employee> findByUserId(Long userId);
 
 }
