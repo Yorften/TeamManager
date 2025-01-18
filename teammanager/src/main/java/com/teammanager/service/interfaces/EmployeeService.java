@@ -2,6 +2,7 @@ package com.teammanager.service.interfaces;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 
 import com.teammanager.dto.employee.CreateEmployeeDTO;
 import com.teammanager.dto.employee.EmployeeCriteria;
@@ -28,7 +29,7 @@ public interface EmployeeService {
 
     EmployeeDTO addEmployee(CreateEmployeeDTO Employee);
 
-    EmployeeDTO updateEmployee(Long EmployeeId, UpdateEmployeeDTO Employee, String... with);
+    EmployeeDTO updateEmployee(Long EmployeeId, UpdateEmployeeDTO Employee, Authentication authentication);
 
     void deleteEmployeeById(Long EmployeeId);
 

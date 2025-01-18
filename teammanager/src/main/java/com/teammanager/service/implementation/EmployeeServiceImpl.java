@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.teammanager.dto.employee.CreateEmployeeDTO;
@@ -94,12 +93,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDTO updateEmployee(Long employeeId, UpdateEmployeeDTO employeeDTO, String... with) {
+    public EmployeeDTO updateEmployee(Long employeeId, UpdateEmployeeDTO employeeDTO, Authentication authentication) {
 
         Employee employeeDB = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Employee managerEmployee = null;
 

@@ -15,6 +15,8 @@ import java.time.LocalDate;
 @Builder
 public class EmployeeDTO {
 
+    private Long id;
+
     private String fullName;
 
     private String jobTitle;
