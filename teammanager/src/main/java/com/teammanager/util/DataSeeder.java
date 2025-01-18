@@ -13,7 +13,6 @@ import com.teammanager.model.*;
 import com.teammanager.model.enums.EmploymentStatus;
 import com.teammanager.repository.EmployeeRepository;
 import com.teammanager.repository.RoleRepository;
-import com.teammanager.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,6 @@ public class DataSeeder {
 
 	private RoleRepository roleRepository;
 	private EmployeeRepository employeeRepository;
-	private UserRepository userRepository;
 	private BCryptPasswordEncoder passwordEncoder;
 
 	public void seedDatabase(int max) {
@@ -48,7 +46,6 @@ public class DataSeeder {
 				.password(passwordEncoder.encode("password"))
 				.role(adminRole)
 				.build();
-		userRepository.saveAndFlush(adminUser);
 
 		Employee adminEmployee = Employee.builder()
 				.fullName("System Admin")
@@ -60,6 +57,7 @@ public class DataSeeder {
 				.address(faker.address().fullAddress())
 				.user(adminUser)
 				.build();
+
 		employeeRepository.save(adminEmployee);
 
 		// Create other employees
@@ -82,7 +80,7 @@ public class DataSeeder {
 						.password(passwordEncoder.encode("password"))
 						.role(managerRole)
 						.build();
-				userRepository.save(user);
+
 				employee.setUser(user);
 				employee.setJobTitle("Department Manager");
 			} else if (i % 9 == 0) { // HR
@@ -92,12 +90,9 @@ public class DataSeeder {
 						.password(passwordEncoder.encode("password"))
 						.role(hrRole)
 						.build();
-				userRepository.save(user);
+
 				employee.setUser(user);
 				employee.setJobTitle("HR Specialist");
-			} else {
-				// Regular employees don't get user accounts
-				employee.setUser(null);
 			}
 
 			employeeRepository.save(employee);
