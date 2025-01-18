@@ -1,7 +1,7 @@
 package com.teammanager.service.implementation;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,7 +43,6 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
 	}
 
 	private Collection<? extends GrantedAuthority> getAuthorities(User user) {
-		return user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName()))
-				.collect(Collectors.toList());
+		return Arrays.asList(new SimpleGrantedAuthority(user.getRole().getName()));
 	}
 }

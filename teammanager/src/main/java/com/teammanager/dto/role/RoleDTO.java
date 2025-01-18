@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class RoleDTO {
     
-    private String id;
+    private Long id;
 
     @NotNull(message = "Role name cannot be null")
     @Size(min = 3, max = 100, message = "Role name must be between 3 and 100 characters")

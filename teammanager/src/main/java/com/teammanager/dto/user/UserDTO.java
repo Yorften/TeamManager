@@ -1,8 +1,5 @@
 package com.teammanager.dto.user;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -37,8 +34,7 @@ public class UserDTO {
     @Email(message = "Error in email format")
     private String email;
 
-    @Builder.Default
-    @NotNull(message = "Roles not provided")
-    private Set<RoleDTO> roles = new HashSet<>();
+    @NotNull(message = "Role not provided")
+    private RoleDTO role;
 
 }
