@@ -28,10 +28,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * REST controller for managing Zone entities by the admin.
+ * REST controller for managing authentication routes.
  * Handles HTTP requests and routes them to the appropriate service methods.
  */
-@RestController // Marks this class as a RESTful controller.
+@RestController
 @RequestMapping("/api/auth")
 @AllArgsConstructor
 @Slf4j
