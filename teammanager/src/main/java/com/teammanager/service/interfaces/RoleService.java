@@ -1,5 +1,13 @@
 package com.teammanager.service.interfaces;
 
-public interface RoleService {
+import com.teammanager.model.Role;
 
+/**
+ * Service interface for Role entity.
+ * Defines methods for CRUD operations and additional business logic.
+ */
+public interface RoleService {
+    Role getRoleById(long id);
+
+    Role getRoleByName(String name);
 }
