@@ -13,6 +13,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+/**
+ * Represents a Token blacklist entity in the application.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

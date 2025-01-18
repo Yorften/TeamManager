@@ -2,7 +2,6 @@ package com.teammanager.mapper;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -21,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class UserMapper {
-    private final List<String> VALID_INCLUDES = Arrays.asList("roles", "employee");
+    private final List<String> VALID_INCLUDES = Arrays.asList("role", "employee");
 
     private final RoleService roleService;
 
@@ -37,13 +36,13 @@ public class UserMapper {
     }
 
     public User convertToEntity(UserDTO userDTO) {
-        Set<Role> roles = roleService.getAllRolesByName(userDTO.getRoles());
+        Role role = roleService.getRoleByName(userDTO.getRole().getName());
 
         return User.builder()
                 .email(userDTO.getEmail())
                 .username(userDTO.getUsername())
                 .password(userDTO.getPassword())
-                .roles(roles)
+                .role(role)
                 .build();
     }
 
@@ -63,12 +62,13 @@ public class UserMapper {
     public UserDTO convertToDTO(User user, String... with) {
         List<String> includesList = Arrays.asList(with);
 
-        Set<RoleDTO> roleDTOs = null;
+        RoleDTO roleDTO = null;
 
-        if (includesList.contains("roles")) {
-            Set<Role> roles = user.getRoles();
-            roleDTOs = roles.stream().map(role -> RoleDTO.builder().name(role.getName()).build())
-                    .collect(Collectors.toSet());
+        if (includesList.contains("role")) {
+            Role role = user.getRole();
+            roleDTO = RoleDTO.builder()
+                    .name(role.getName())
+                    .build();
         }
 
         if (includesList.contains("employee")) {
@@ -78,7 +78,7 @@ public class UserMapper {
         return UserDTO.builder()
                 .email(user.getEmail())
                 .username(user.getUsername())
-                .roles(roleDTOs)
+                .role(roleDTO)
                 .build();
     }
 

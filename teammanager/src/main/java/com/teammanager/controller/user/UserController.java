@@ -33,14 +33,14 @@ public class UserController {
 
     @GetMapping
     public Page<UserDTO> getAllUsers(@RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "5") int size) {
+            @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of((page - 1), size, Sort.by("id").ascending());
-        return userService.getAllUsers(pageable, "roles");
+        return userService.getAllUsers(pageable, "role");
     }
 
     @PutMapping("/{id}/role")
     public UserDTO updateUserRole(@RequestBody @Valid UpdateUserDTO updateUserDTO, @PathVariable("id") Long userId) {
-        return userService.updateUser(userId, updateUserDTO, "roles");
+        return userService.updateUser(userId, updateUserDTO, "role");
     }
 
 }
