@@ -19,7 +19,6 @@ import java.time.format.DateTimeFormatter;
 public class EmployeeAuditEventListener {
 
     private static final String AUDIT_DIR = "audit_logs";
-    private static final DateTimeFormatter FILE_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter LOG_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Async
@@ -32,11 +31,10 @@ public class EmployeeAuditEventListener {
                 auditDir.mkdirs();
             }
 
-            String filename = String.format("%s/employee_audit_%s.log",
-                    AUDIT_DIR,
-                    event.getTimestamp().format(FILE_DATE_FORMAT));
+            String filename = String.format("%s/employee_audit.log",
+                    AUDIT_DIR);
 
-            String logEntry = String.format("[%s] %s - Employee ID: %d, Name: %s, Modified By: %s, Details: %s%n",
+            String logEntry = String.format("[%s] %s - Employee ID: %d, Name: %s, Initiated By: %s \n",
                     event.getTimestamp().format(LOG_TIME_FORMAT),
                     event.getAction(),
                     event.getEmployeeId(),

@@ -157,7 +157,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDB = employeeRepository.save(employeeDB);
 
         auditEventPublisher.publishEmployeeUpdateEvent(employeeDB);
-        ;
 
         return employeeMapper.convertToDTO(employeeDB);
     }
