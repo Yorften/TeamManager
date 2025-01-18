@@ -16,7 +16,7 @@ public class Main {
     @Bean
     CommandLineRunner init(DataSeeder dataSeeder) {
         return args -> {
-            dataSeeder.seedDatabase(50); // Seed 10 records in each table
+            dataSeeder.seedDatabase(50); // Seed 50 records in each table
         };
     }
 
