@@ -17,6 +17,7 @@ import com.teammanager.model.Employee;
 import com.teammanager.model.User;
 import com.teammanager.repository.EmployeeRepository;
 import com.teammanager.repository.UserRepository;
+import com.teammanager.service.helper.AuditEventPublisher;
 import com.teammanager.service.interfaces.EmployeeService;
 import com.teammanager.specification.EmployeeSpecification;
 
@@ -34,6 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final UserRepository userRepository;
+    private final AuditEventPublisher auditEventPublisher;
     private final EmployeeMapper employeeMapper;
 
     @Override
@@ -83,7 +85,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDTO addEmployee(EmployeeDTO employeeDTO) {
         Employee employee = employeeMapper.convertToEntity(employeeDTO);
-        return employeeMapper.convertToDTO(employeeRepository.save(employee));
+        employee = employeeRepository.save(employee);
+
+        auditEventPublisher.publishEmployeeCreateEvent(employee);
+
+        return employeeMapper.convertToDTO(employee);
     }
 
     @Override
@@ -98,9 +104,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         if (authentication.getAuthorities().stream()
                 .anyMatch(authority -> authority.getAuthority().equals("ROLE_MANAGER"))) {
+
             User authUser = userRepository.findByUsername(authentication.getName())
                     .orElseThrow(() -> new ResourceNotFoundException("Authenticated user not found"));
-
+                    
             managerEmployee = employeeRepository.findByUserId(authUser.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Manager's employee details not found"));
 
@@ -146,7 +153,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         }
 
-        return employeeMapper.convertToDTO(employeeRepository.save(employeeDB));
+        employeeDB = employeeRepository.save(employeeDB);
+
+        auditEventPublisher.publishEmployeeUpdateEvent(employeeDB);
+        ;
+
+        return employeeMapper.convertToDTO(employeeDB);
     }
 
     @Override

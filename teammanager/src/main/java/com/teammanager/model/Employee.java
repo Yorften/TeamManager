@@ -76,7 +76,7 @@ public class Employee {
     @Column(nullable = true)
     private LocalDateTime removedAt;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = true)
+    @OneToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 }
