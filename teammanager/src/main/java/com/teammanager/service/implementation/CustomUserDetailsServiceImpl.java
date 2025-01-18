@@ -17,8 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Service implementation for User entity.
- * Defines methods for CRUD operations and additional business logic.
+ * Service implementation for custom user details.
  */
 @Service
 @Slf4j

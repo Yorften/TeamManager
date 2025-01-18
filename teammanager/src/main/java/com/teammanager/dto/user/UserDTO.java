@@ -20,8 +20,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserDTO {
 
-    private String id;
-
     @NotNull(message = "Username cannot be null")
     @Size(min = 4, max = 32, message = "Username must be between 6 and 32 characters")
     private String username;
