@@ -19,43 +19,43 @@ import com.teammanager.service.implementation.CustomUserDetailsServiceImpl;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private JWTAuthEntryPoint authEntryPoint;
-    private CustomUserDetailsServiceImpl customUserDetailsService;
-    private JWTAuthenticationFilter jwtAuthenticationFilter;
+	private JWTAuthEntryPoint authEntryPoint;
+	private CustomUserDetailsServiceImpl customUserDetailsService;
+	private JWTAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(CustomUserDetailsServiceImpl customUserDetailsService, JWTAuthEntryPoint authEntryPoint,
-            JWTAuthenticationFilter jwtAuthenticationFilter) {
-        this.customUserDetailsService = customUserDetailsService;
-        this.authEntryPoint = authEntryPoint;
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    }
+	public SecurityConfig(CustomUserDetailsServiceImpl customUserDetailsService, JWTAuthEntryPoint authEntryPoint,
+			JWTAuthenticationFilter jwtAuthenticationFilter) {
+		this.customUserDetailsService = customUserDetailsService;
+		this.authEntryPoint = authEntryPoint;
+		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+	}
 
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http
-                .getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(customUserDetailsService);
-        return authenticationManagerBuilder.build();
-    }
+	@Bean
+	public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+		AuthenticationManagerBuilder authenticationManagerBuilder = http
+				.getSharedObject(AuthenticationManagerBuilder.class);
+		authenticationManagerBuilder.userDetailsService(customUserDetailsService);
+		return authenticationManagerBuilder.build();
+	}
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .csrf(csrf -> csrf.disable())
-                .formLogin(login -> login.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/api/auth/register").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .httpBasic(withDefaults())
-                .userDetailsService(customUserDetailsService);
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity
+				.csrf(csrf -> csrf.disable())
+				.formLogin(login -> login.disable())
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers("/api/auth/login").permitAll()
+						.requestMatchers("/api/auth/register").permitAll()
+						.requestMatchers("/api/users").hasAnyRole("ADMIN", "HR")
+						.anyRequest().authenticated())
+				.exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
+				.sessionManagement(session -> session
+						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.httpBasic(withDefaults())
+				.userDetailsService(customUserDetailsService);
 
-        httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+		httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return httpSecurity.build();
-    }
+		return httpSecurity.build();
+	}
 }
