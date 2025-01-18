@@ -36,7 +36,7 @@ public class UserMapper {
     }
 
     public User convertToEntity(UserDTO userDTO) {
-        Role role = roleService.getRoleById(userDTO.getRole().getId());
+        Role role = roleService.getRoleByName(userDTO.getRole().getName());
 
         return User.builder()
                 .email(userDTO.getEmail())

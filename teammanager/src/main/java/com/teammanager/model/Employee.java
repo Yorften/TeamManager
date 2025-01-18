@@ -3,6 +3,7 @@ package com.teammanager.model;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -35,7 +36,7 @@ import com.teammanager.model.enums.EmploymentStatus;
 @NoArgsConstructor
 @Builder
 @Entity(name = "employees")
-@SQLRestriction("removed_at IS NULL")
+@SQLRestriction("removed_at IS NULL AND user_id is NULL")
 @SQLDelete(sql = "UPDATE employees SET removed_at = CURRENT_TIMESTAMP WHERE id=?")
 public class Employee {
 
@@ -76,7 +77,7 @@ public class Employee {
     @Column(nullable = true)
     private LocalDateTime removedAt;
 
-    @OneToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
     private User user;
 }

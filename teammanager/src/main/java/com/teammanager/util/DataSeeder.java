@@ -37,7 +37,7 @@ public class DataSeeder {
 		Role adminRole = roleRepository.save(Role.builder().name("ROLE_ADMIN").build());
 		Role managerRole = roleRepository.save(Role.builder().name("ROLE_MANAGER").build());
 		Role hrRole = roleRepository.save(Role.builder().name("ROLE_HR").build());
-		Role employeeRole = roleRepository.save(Role.builder().name("ROLE_EMPLOYEE").build());
+		roleRepository.save(Role.builder().name("ROLE_EMPLOYEE").build());
 
 		log.info("Seeding started...");
 
@@ -48,7 +48,7 @@ public class DataSeeder {
 				.password(passwordEncoder.encode("password"))
 				.role(adminRole)
 				.build();
-		userRepository.save(adminUser);
+		userRepository.saveAndFlush(adminUser);
 
 		Employee adminEmployee = Employee.builder()
 				.fullName("System Admin")

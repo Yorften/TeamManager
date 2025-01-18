@@ -3,6 +3,7 @@ package com.teammanager.service.interfaces;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.teammanager.dto.employee.CreateEmployeeDTO;
 import com.teammanager.dto.employee.EmployeeCriteria;
 import com.teammanager.dto.employee.EmployeeDTO;
 import com.teammanager.dto.employee.UpdateEmployeeDTO;
@@ -25,7 +26,7 @@ public interface EmployeeService {
 
     Page<EmployeeDTO> getAllEmployees(Pageable pageable, String... with);
 
-    EmployeeDTO addEmployee(EmployeeDTO Employee);
+    EmployeeDTO addEmployee(CreateEmployeeDTO Employee);
 
     EmployeeDTO updateEmployee(Long EmployeeId, UpdateEmployeeDTO Employee, String... with);
 

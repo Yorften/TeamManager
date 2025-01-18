@@ -22,11 +22,18 @@ public class EmployeeSpecification {
             if (criteria.getFullName() != null) {
                 predicates.add(builder.like(root.get("fullName"), "%" + criteria.getFullName() + "%"));
             }
+            if (criteria.getJobTitle() != null) {
+                predicates.add(builder.like(root.get("jobTitle"), "%" + criteria.getJobTitle() + "%"));
+            }
             if (criteria.getDepartment() != null) {
                 predicates.add(builder.like(root.get("department"), "%" + criteria.getDepartment() + "%"));
             }
-            if (criteria.getJobTitle() != null) {
-                predicates.add(builder.equal(root.get("jobTitle"), criteria.getJobTitle()));
+            if (criteria.getEmploymentStatus() != null) {
+                predicates.add(builder.equal(root.get("employmentStatus"), criteria.getEmploymentStatus()));
+            }
+            if (criteria.getHireDateFrom() != null && criteria.getHireDateTo() != null) {
+                predicates.add(
+                        builder.between(root.get("hireDate"), criteria.getHireDateFrom(), criteria.getHireDateTo()));
             }
 
             return builder.and(predicates.toArray(new Predicate[0]));

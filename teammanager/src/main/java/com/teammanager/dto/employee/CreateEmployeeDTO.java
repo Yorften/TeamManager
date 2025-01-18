@@ -7,7 +7,9 @@ import com.teammanager.model.enums.EmploymentStatus;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
+@Data
 public class CreateEmployeeDTO {
 
     @NotNull(message = "Full name is required")
@@ -36,5 +38,6 @@ public class CreateEmployeeDTO {
     @Size(min = 5, max = 100, message = "Employee address must be between 5 and 100 characters")
     private String address;
 
+    private Long userId;
 
 }

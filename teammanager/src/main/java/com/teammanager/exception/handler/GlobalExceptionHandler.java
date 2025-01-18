@@ -1,81 +1,81 @@
-package com.teammanager.exception.handler;
+// package com.teammanager.exception.handler;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+// import org.springframework.http.HttpStatus;
+// import org.springframework.http.ResponseEntity;
+// import org.springframework.security.authentication.BadCredentialsException;
+// import org.springframework.web.bind.MethodArgumentNotValidException;
+// import org.springframework.web.bind.annotation.ControllerAdvice;
+// import org.springframework.web.bind.annotation.ExceptionHandler;
+// import org.springframework.web.bind.annotation.ResponseBody;
+// import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.teammanager.dto.error.ErrorResponse;
-import com.teammanager.dto.error.ValidationError;
-import com.teammanager.exception.InactiveDeviceException;
-import com.teammanager.exception.InvalidDataException;
-import com.teammanager.exception.ResourceNotFoundException;
+// import com.teammanager.dto.error.ErrorResponse;
+// import com.teammanager.dto.error.ValidationError;
+// import com.teammanager.exception.InactiveDeviceException;
+// import com.teammanager.exception.InvalidDataException;
+// import com.teammanager.exception.ResourceNotFoundException;
 
-import lombok.extern.slf4j.Slf4j;
+// import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
+// import java.time.LocalDate;
+// import java.util.List;
+// import java.util.stream.Collectors;
 
-@ControllerAdvice
-@Slf4j
-public class GlobalExceptionHandler {
+// @ControllerAdvice
+// @Slf4j
+// public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(LocalDate.now(), ex.getMessage(),
-                HttpStatus.NOT_FOUND.value(), null);
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
+//     @ExceptionHandler(ResourceNotFoundException.class)
+//     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
+//         ErrorResponse errorResponse = new ErrorResponse(LocalDate.now(), ex.getMessage(),
+//                 HttpStatus.NOT_FOUND.value(), null);
+//         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+//     }
 
-    @ExceptionHandler(InvalidDataException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidDataException(InvalidDataException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(LocalDate.now(), ex.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), null);
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
+//     @ExceptionHandler(InvalidDataException.class)
+//     public ResponseEntity<ErrorResponse> handleInvalidDataException(InvalidDataException ex) {
+//         ErrorResponse errorResponse = new ErrorResponse(LocalDate.now(), ex.getMessage(),
+//                 HttpStatus.BAD_REQUEST.value(), null);
+//         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//     }
 
-    @ExceptionHandler(InactiveDeviceException.class)
-    public ResponseEntity<ErrorResponse> handleInactiveDeviceException(InactiveDeviceException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(LocalDate.now(), ex.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), null);
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
+//     @ExceptionHandler(InactiveDeviceException.class)
+//     public ResponseEntity<ErrorResponse> handleInactiveDeviceException(InactiveDeviceException ex) {
+//         ErrorResponse errorResponse = new ErrorResponse(LocalDate.now(), ex.getMessage(),
+//                 HttpStatus.BAD_REQUEST.value(), null);
+//         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ErrorResponse handleValidationException(MethodArgumentNotValidException ex) {
-        List<ValidationError> errors = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(fieldError -> new ValidationError(fieldError.getField(), fieldError.getDefaultMessage()))
-                .collect(Collectors.toList());
+//     @ExceptionHandler(MethodArgumentNotValidException.class)
+//     @ResponseStatus(HttpStatus.BAD_REQUEST)
+//     @ResponseBody
+//     public ErrorResponse handleValidationException(MethodArgumentNotValidException ex) {
+//         List<ValidationError> errors = ex.getBindingResult()
+//                 .getFieldErrors()
+//                 .stream()
+//                 .map(fieldError -> new ValidationError(fieldError.getField(), fieldError.getDefaultMessage()))
+//                 .collect(Collectors.toList());
 
-        return new ErrorResponse(
-                LocalDate.now(),
-                "Validation failed",
-                HttpStatus.BAD_REQUEST.value(),
-                errors);
-    }
+//         return new ErrorResponse(
+//                 LocalDate.now(),
+//                 "Validation failed",
+//                 HttpStatus.BAD_REQUEST.value(),
+//                 errors);
+//     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(LocalDate.now(), "The identifications are wrong",
-                HttpStatus.BAD_REQUEST.value(), null);
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
+//     @ExceptionHandler(BadCredentialsException.class)
+//     @ResponseStatus(HttpStatus.UNAUTHORIZED)
+//     public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex) {
+//         ErrorResponse errorResponse = new ErrorResponse(LocalDate.now(), "The identifications are wrong",
+//                 HttpStatus.BAD_REQUEST.value(), null);
+//         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-        ErrorResponse errorResponse = new ErrorResponse(LocalDate.now(), ex.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), null);
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
+//     @ExceptionHandler(Exception.class)
+//     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
+//         ErrorResponse errorResponse = new ErrorResponse(LocalDate.now(), ex.getMessage(),
+//                 HttpStatus.BAD_REQUEST.value(), null);
+//         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//     }
 
-}
+// }

@@ -7,9 +7,12 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.teammanager.dto.user.UserDTO;
+import com.teammanager.dto.employee.CreateEmployeeDTO;
 import com.teammanager.dto.employee.EmployeeDTO;
 import com.teammanager.exception.InvalidDataException;
+import com.teammanager.exception.ResourceNotFoundException;
 import com.teammanager.model.User;
+import com.teammanager.repository.UserRepository;
 import com.teammanager.model.Employee;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EmployeeMapper {
     private final List<String> VALID_INCLUDES = Arrays.asList("user");
+
+    private final UserRepository userRepository;
 
     public void verifyIncludes(String... with)
             throws InvalidDataException {
@@ -32,7 +37,14 @@ public class EmployeeMapper {
         }
     }
 
-    public Employee convertToEntity(EmployeeDTO employeeDTO) {
+    public Employee convertToEntity(CreateEmployeeDTO employeeDTO) {
+        User user = null;
+
+        if (employeeDTO.getUserId() != null) {
+            user = userRepository.findById(employeeDTO.getUserId())
+                    .orElseThrow(() -> new ResourceNotFoundException("user not found"));
+        }
+
         return Employee.builder()
                 .fullName(employeeDTO.getFullName())
                 .jobTitle(employeeDTO.getJobTitle())
@@ -41,6 +53,7 @@ public class EmployeeMapper {
                 .employmentStatus(employeeDTO.getEmploymentStatus())
                 .contactInformation(employeeDTO.getContactInformation())
                 .address(employeeDTO.getAddress())
+                .user(user)
                 .build();
     }
 

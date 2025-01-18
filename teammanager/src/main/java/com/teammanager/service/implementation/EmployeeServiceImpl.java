@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.teammanager.dto.employee.CreateEmployeeDTO;
 import com.teammanager.dto.employee.EmployeeCriteria;
 import com.teammanager.dto.employee.EmployeeDTO;
 import com.teammanager.dto.employee.UpdateEmployeeDTO;
@@ -83,7 +84,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDTO addEmployee(EmployeeDTO employeeDTO) {
+    public EmployeeDTO addEmployee(CreateEmployeeDTO employeeDTO) {
         Employee employee = employeeMapper.convertToEntity(employeeDTO);
         employee = employeeRepository.save(employee);
 

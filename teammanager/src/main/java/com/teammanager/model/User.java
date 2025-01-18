@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -35,6 +34,7 @@ import lombok.NoArgsConstructor;
 @SQLDelete(sql = "UPDATE users SET removed_at = CURRENT_TIMESTAMP WHERE id=?")
 @Entity(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -60,10 +60,11 @@ public class User {
     @Column(nullable = true)
     private LocalDateTime removedAt;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, optional = false)
     private Employee employee;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+
 }

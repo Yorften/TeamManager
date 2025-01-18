@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.teammanager.dto.employee.CreateEmployeeDTO;
 import com.teammanager.dto.employee.EmployeeCriteria;
 import com.teammanager.dto.employee.EmployeeDTO;
 import com.teammanager.dto.employee.UpdateEmployeeDTO;
@@ -52,7 +53,7 @@ public class EmployeeController {
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
     public EmployeeDTO saveEmployee(
-            @RequestBody @Valid EmployeeDTO employeeDTO) {
+            @RequestBody @Valid CreateEmployeeDTO employeeDTO) {
         return employeeService.addEmployee(employeeDTO);
     }
 
@@ -92,7 +93,7 @@ public class EmployeeController {
         criteria.setFullName(fullName);
         criteria.setJobTitle(jobTitle);
         criteria.setDepartment(department);
-        criteria.setEmploymentStatus(EmploymentStatus.valueOf(employmentStatus));
+        criteria.setEmploymentStatus(employmentStatus != null ? EmploymentStatus.valueOf(employmentStatus) : null);
         criteria.setHireDateFrom(hireDateFrom);
         criteria.setHireDateTo(hireDateTo);
 
