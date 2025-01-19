@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,6 +38,13 @@ public class UserController {
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of((page - 1), size, Sort.by("id").ascending());
         return userService.getAllUsers(pageable, "role");
+    }
+
+    @GetMapping("/@me")
+    public UserDTO getUserInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return userService.getByUserName(username, "role");
     }
 
     @PutMapping("/{id}/role")
