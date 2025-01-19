@@ -68,11 +68,6 @@
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20250107</version>
@@ -147,7 +142,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.teammanager.TeamManagerGUI</mainClass>
+                            <mainClass>com.teammanagerui.TeamManagerGUI</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
