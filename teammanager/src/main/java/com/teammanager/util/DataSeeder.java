@@ -3,6 +3,7 @@ package com.teammanager.util;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Locale;
+import java.util.Random;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -50,10 +51,10 @@ public class DataSeeder {
 		Employee adminEmployee = Employee.builder()
 				.fullName("System Admin")
 				.jobTitle("System Administrator")
-				.department("IT")
+				.department(Departments.ADMINISTRATION.name())
 				.hireDate(LocalDate.now())
 				.employmentStatus(EmploymentStatus.FULL_TIME)
-				.contactInformation(faker.phoneNumber().phoneNumber())
+				.contactInformation(generatePhoneNumber())
 				.address(faker.address().fullAddress())
 				.user(adminUser)
 				.build();
@@ -65,10 +66,10 @@ public class DataSeeder {
 			Employee employee = Employee.builder()
 					.fullName(faker.name().fullName())
 					.jobTitle(faker.job().title())
-					.department(faker.commerce().department())
+					.department(getRandomDepartment())
 					.hireDate(LocalDate.now().minusDays(faker.number().numberBetween(1, 365)))
 					.employmentStatus(EmploymentStatus.FULL_TIME)
-					.contactInformation(faker.phoneNumber().phoneNumber())
+					.contactInformation(generatePhoneNumber())
 					.address(faker.address().fullAddress())
 					.build();
 
@@ -93,6 +94,8 @@ public class DataSeeder {
 
 				employee.setUser(user);
 				employee.setJobTitle("HR Specialist");
+				employee.setDepartment(Departments.HUMAN_RESOURCES.name());
+
 			}
 
 			employeeRepository.save(employee);
@@ -104,6 +107,27 @@ public class DataSeeder {
 
 		log.info("Seeding complete : time taken " + timeTaken + " s");
 
+	}
+
+	private String getRandomDepartment() {
+		Departments[] departments = Departments.values();
+		int randomIndex = new Random().nextInt(departments.length);
+		return departments[randomIndex].name();
+	}
+
+	private String generatePhoneNumber() {
+		Random random = new Random();
+		StringBuilder phoneNumber = new StringBuilder("+");
+
+		// Add country code (e.g., +232)
+		phoneNumber.append(random.nextInt(900) + 100);
+
+		// Add 9-digit phone number
+		for (int i = 0; i < 9; i++) {
+			phoneNumber.append(random.nextInt(10));
+		}
+
+		return phoneNumber.toString();
 	}
 
 }

@@ -17,7 +17,7 @@ public class UpdateEmployeeDTO {
     @Size(min = 5, max = 100, message = "Job title must be between 5 and 100 characters")
     private String jobTitle;
 
-    @Size(min = 5, max = 100, message = "Employee name must be between 5 and 100 characters")
+    @Size(min = 2, max = 100, message = "Employee name must be between 5 and 100 characters")
     private String department;
 
     private LocalDate hireDate;

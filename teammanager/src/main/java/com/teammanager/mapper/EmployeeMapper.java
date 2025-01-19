@@ -59,6 +59,7 @@ public class EmployeeMapper {
 
     public EmployeeDTO convertToDTO(Employee employee) {
         return EmployeeDTO.builder()
+                .id(employee.getId())
                 .fullName(employee.getFullName())
                 .jobTitle(employee.getJobTitle())
                 .department(employee.getDepartment())
@@ -89,6 +90,7 @@ public class EmployeeMapper {
         }
 
         return EmployeeDTO.builder()
+                .id(employee.getId())
                 .fullName(employee.getFullName())
                 .jobTitle(employee.getJobTitle())
                 .department(employee.getDepartment())

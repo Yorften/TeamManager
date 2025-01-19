@@ -1,7 +1,7 @@
 package com.teammanager.service.implementation;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -59,16 +59,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDTO> getAllUsers(Pageable pageable, String... with) {
+    public List<UserDTO> getAllUsers(String... with) {
         userMapper.verifyIncludes(with);
-        Page<User> userPage = userRepository.findAll(pageable);
-        return userPage.map(user -> userMapper.convertToDTO(user, with));
+        List<User> users = userRepository.findAll();
+        return userMapper.convertToDTOList(users, with);
     }
 
     @Override
-    public Page<UserDTO> getAllUsers(Pageable pageable) {
-        Page<User> userPage = userRepository.findAll(pageable);
-        return userPage.map(user -> userMapper.convertToDTO(user));
+    public List<UserDTO> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return userMapper.convertToDTOList(users);
     }
 
     @Override
