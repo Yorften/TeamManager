@@ -23,51 +23,58 @@
 
 ### 2. **Project Architecture**
    - **Task: Design Project Architecture**  
-     **Status:** 🔄 In Progress  
+     **Status:** ✅ In Progress  
      **Description:** Establish a clear and maintainable architecture for the project, including controllers, services, and repositories.
 
 ### 3. **Configuration**
    - **Task: Security Configuration**  
-     **Status:** ⬜ To Do  
+     **Status:** ✅ Done 
      **Description:** Implement Spring Security for role-based access control (RBAC) and secure API endpoints.
-
-   - **Task: Permissions Service**  
-     **Status:** ⬜ To Do  
-     **Description:** Develop a service to manage user roles and permissions for HR, Managers, and Administrators.
 
 ### 4. **Authentication**
    - **Task: Authentication Endpoints**  
-     **Status:** ⬜ To Do  
+     **Status:** ✅ Done  
      **Description:** Implement endpoints for user authentication and session management.
 
 ### 5. **Employee Management**
    - **Task: Employee Entity**  
-     **Status:** ⬜ To Do  
+     **Status:** ✅ Done  
      **Description:** Create the Employee entity to manage employee details such as full name, job title, and contact information.
 
    - **Task: Employee Service**  
-     **Status:** ⬜ To Do  
+     **Status:** ✅ Done  
      **Description:** Develop service logic for CRUD operations on employee records.
 
    - **Task: Employee Endpoints**  
-     **Status:** ⬜ To Do  
+     **Status:** ✅ Done  
      **Description:** Expose RESTful API endpoints for employee management with search and filtering capabilities.
 
 ### 6. **Testing**
    - **Task: Unit Tests**  
-     **Status:** ⬜ To Do  
+     **Status:** ✅ Done  
      **Description:** Write unit tests for all services and core components using JUnit and Mockito.
 
-   - **Task: Integration Tests**  
-     **Status:** ⬜ To Do  
-     **Description:** Develop integration tests to validate API endpoint functionality and ensure proper interaction between system components.
 
-### 5. **UI Implementation**
-    # To do #
+### 7. **UI Implementation**
+  - **Task: Employee Management UI**  
+    **Status:** ✅ Done  
+    **Description:** Develop a Swing-based user interface for managing employee records, with MigLayout and GridBagLayout.
 
-### 7. **DevOps**
+  - **Task: Authentication UI**  
+    **Status:** ✅ Done  
+    **Description:** Create a login interface with username/password fields and token-based authentication handling.
+
+  - **Task: Logs UI**  
+    **Status:** ✅ Done  
+    **Description:** Develop a UI to display audit logs in a scrollable, read-only text pane.
+
+  - **Task: Users Management UI**  
+    **Status:** ✅ Done  
+    **Description:** Implement a UI for managing users and their roles.
+
+### 8. **DevOps**
    - **Task: Dockerization**  
-     **Status:** ⬜ To Do  
+     **Status:** ✅ Done  
      **Description:** Create Docker images for the application to facilitate testing and deployment.
 
 
