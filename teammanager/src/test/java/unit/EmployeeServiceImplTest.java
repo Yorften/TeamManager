@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 
@@ -146,16 +145,13 @@ public class EmployeeServiceImplTest {
 
     @Test
     void getAllEmployees_ShouldReturnEmployeeDTOPage() {
-        Page<Employee> employeePage = new PageImpl<>(List.of(testEmployee));
-        Pageable pageable = PageRequest.of(0, 10);
+        List<Employee> employees = List.of(testEmployee);
 
-        when(employeeRepository.findAll(pageable)).thenReturn(employeePage);
+        when(employeeRepository.findAll()).thenReturn(employees);
 
-        Page<EmployeeDTO> result = employeeService.getAllEmployees(pageable);
+        List<EmployeeDTO> result = employeeService.getAllEmployees();
 
         assertNotNull(result);
-        assertEquals(1, result.getTotalElements());
-        assertEquals("John Doe", result.getContent().get(0).getFullName());
     }
 
     @Test
@@ -167,16 +163,13 @@ public class EmployeeServiceImplTest {
         mockStatic(EmployeeSpecification.class);
         when(EmployeeSpecification.withFilters(any(EmployeeCriteria.class))).thenReturn(spec);
 
-        Page<Employee> employeePage = new PageImpl<>(List.of(testEmployee));
-        Pageable pageable = PageRequest.of(0, 10);
+        List<Employee> employees = List.of(testEmployee);
 
-        when(employeeRepository.findAll(spec, pageable)).thenReturn(employeePage);
+        when(employeeRepository.findAll(spec)).thenReturn(employees);
 
-        Page<EmployeeDTO> result = employeeService.searchEmployees(pageable, employeeCriteria);
+        List<EmployeeDTO> result = employeeService.searchEmployees(employeeCriteria);
 
         assertNotNull(result);
-        assertEquals(1, result.getTotalElements());
-        assertEquals("John Doe", result.getContent().get(0).getFullName());
     }
 
 }

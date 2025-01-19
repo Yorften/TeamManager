@@ -1,11 +1,14 @@
 package com.teammanagerui.view;
 
 import javax.swing.*;
-import java.awt.*;
+import net.miginfocom.swing.MigLayout;
 
 public class EmployeesPanel extends JPanel {
     public EmployeesPanel() {
-        setLayout(new BorderLayout());
-        add(new JLabel("Employees works!", SwingConstants.CENTER), BorderLayout.CENTER);
+        setLayout(new MigLayout("fill", "[grow]", "[][][grow]"));
+
+        add(new JLabel("Employees"), "wrap");
+        add(new JTextField("Search Employees", 20), "growx, wrap");
+        add(new JScrollPane(new JTable()), "grow");
     }
 }

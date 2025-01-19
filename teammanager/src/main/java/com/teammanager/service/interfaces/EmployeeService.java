@@ -1,7 +1,7 @@
 package com.teammanager.service.interfaces;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+
 import org.springframework.security.core.Authentication;
 
 import com.teammanager.dto.employee.CreateEmployeeDTO;
@@ -21,11 +21,11 @@ public interface EmployeeService {
 
     EmployeeDTO getByEmployeeName(String userName);
 
-    Page<EmployeeDTO> searchEmployees(Pageable pageable, EmployeeCriteria employeeCriteria);
+    List<EmployeeDTO> searchEmployees(EmployeeCriteria employeeCriteria);
 
-    Page<EmployeeDTO> getAllEmployees(Pageable pageable);
+    List<EmployeeDTO> getAllEmployees();
 
-    Page<EmployeeDTO> getAllEmployees(Pageable pageable, String... with);
+    List<EmployeeDTO> getAllEmployees(String... with);
 
     EmployeeDTO addEmployee(CreateEmployeeDTO Employee);
 

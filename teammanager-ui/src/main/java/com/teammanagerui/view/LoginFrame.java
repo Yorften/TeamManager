@@ -1,47 +1,53 @@
 package com.teammanagerui.view;
 
-import com.teammanagerui.controller.LoginController;
+import com.teammanagerui.controller.AuthController;
 import com.teammanagerui.model.LoginModel;
 import com.teammanagerui.service.AuthService;
 
 import net.miginfocom.swing.MigLayout;
+
 import javax.swing.*;
+import java.awt.*;
 
 public class LoginFrame extends JFrame {
     private JTextField txtUsername;
     private JPasswordField txtPassword;
-    private JButton btnLogin;
+    private JButton loginButton;
 
-    private final LoginController controller;
+    private final AuthController controller;
 
     public LoginFrame() {
         // Create model, service, and controller
         LoginModel model = new LoginModel();
         AuthService authService = new AuthService();
-        this.controller = new LoginController(model, authService);
+        this.controller = new AuthController(model, authService);
 
         initUI();
     }
 
     private void initUI() {
-        setTitle("Login");
-        setSize(400, 200);
+        setTitle("Employee Management System - Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new MigLayout("", "[][]", "[][][]"));
-
-        add(new JLabel("Username:"));
-        txtUsername = new JTextField(20);
-        add(txtUsername, "wrap");
-
-        add(new JLabel("Password:"));
-        txtPassword = new JPasswordField(20);
-        add(txtPassword, "wrap");
-
-        btnLogin = new JButton("Login");
-        add(btnLogin, "span, align center");
-
-        btnLogin.addActionListener(e -> onLoginClick());
+        setMinimumSize(new Dimension(400, 200));
         setLocationRelativeTo(null);
+
+        txtUsername = new JTextField(20);
+        txtPassword = new JPasswordField(20);
+        loginButton = new JButton("Login");
+
+        JPanel mainPanel = new JPanel(new MigLayout("fillx, insets 20", "[right][grow]"));
+
+        mainPanel.add(new JLabel("Username:"), "");
+        mainPanel.add(txtUsername, "growx, wrap");
+        mainPanel.add(new JLabel("Password:"), "");
+        mainPanel.add(txtPassword, "growx, wrap");
+        mainPanel.add(loginButton, "skip, right, wrap");
+
+        loginButton.addActionListener(e -> onLoginClick());
+
+        add(mainPanel);
+        pack();
+
     }
 
     private void onLoginClick() {

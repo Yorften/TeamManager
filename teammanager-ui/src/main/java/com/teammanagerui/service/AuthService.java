@@ -4,7 +4,9 @@ import java.io.IOException;
 
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teammanagerui.config.EnvConfig;
+import com.teammanagerui.model.LoginModel;
 import com.teammanagerui.utils.SessionManager;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +27,15 @@ public class AuthService {
         this.baseUrl = EnvConfig.get("BASE_URL");
     }
 
+
     public String login(String username, String password) throws IOException {
         // Create JSON body
-        String jsonBody = String.format("{\"username\": \"%s\", \"password\": \"%s\"}", username, password);
+        LoginModel loginModel = new LoginModel();
+        loginModel.setUsername(username);
+        loginModel.setPassword(password);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonBody = objectMapper.writeValueAsString(loginModel);
 
         RequestBody body = RequestBody.create(
                 jsonBody, MediaType.parse("application/json"));
@@ -46,6 +54,16 @@ public class AuthService {
             } else {
                 throw new IOException("Failed to login: " + response.code() + " " + response.message());
             }
+        }
+    }
+
+
+    public void logout() throws IOException{
+        Request request = new Request.Builder()
+                .url(baseUrl + "/auth/logout")
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
         }
     }
 

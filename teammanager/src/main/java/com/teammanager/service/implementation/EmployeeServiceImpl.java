@@ -1,7 +1,7 @@
 package com.teammanager.service.implementation;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
@@ -61,25 +61,25 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Page<EmployeeDTO> getAllEmployees(Pageable pageable) {
-        Page<Employee> employeePage = employeeRepository.findAll(pageable);
+    public List<EmployeeDTO> getAllEmployees() {
+        List<Employee> employees = employeeRepository.findAll();
 
-        return employeePage.map(employee -> employeeMapper.convertToDTO(employee));
+        return employeeMapper.convertToDTOList(employees);
     }
 
     @Override
-    public Page<EmployeeDTO> getAllEmployees(Pageable pageable, String... with) {
-        Page<Employee> employeePage = employeeRepository.findAll(pageable);
+    public List<EmployeeDTO> getAllEmployees(String... with) {
+        List<Employee> employees = employeeRepository.findAll();
 
-        return employeePage.map(employee -> employeeMapper.convertToDTO(employee, with));
+        return employeeMapper.convertToDTOList(employees, with);
     }
 
     @Override
-    public Page<EmployeeDTO> searchEmployees(Pageable pageable, EmployeeCriteria employeeCriteria) {
+    public List<EmployeeDTO> searchEmployees(EmployeeCriteria employeeCriteria) {
         Specification<Employee> spec = EmployeeSpecification.withFilters(employeeCriteria);
-        Page<Employee> employeePage = employeeRepository.findAll(spec, pageable);
+        List<Employee> employees = employeeRepository.findAll(spec);
 
-        return employeePage.map(employee -> employeeMapper.convertToDTO(employee));
+        return employeeMapper.convertToDTOList(employees);
     }
 
     @Override
@@ -98,7 +98,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employeeDB = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
 
-
         Employee managerEmployee = null;
 
         if (authentication.getAuthorities().stream()
@@ -106,7 +105,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             User authUser = userRepository.findByUsername(authentication.getName())
                     .orElseThrow(() -> new ResourceNotFoundException("Authenticated user not found"));
-                    
+
             managerEmployee = employeeRepository.findByUserId(authUser.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Manager's employee details not found"));
 

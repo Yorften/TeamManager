@@ -6,11 +6,11 @@ import com.teammanagerui.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class LoginController {
+public class AuthController {
     private final LoginModel model;
     private final AuthService authService;
 
-    public LoginController(LoginModel model, AuthService authService) {
+    public AuthController(LoginModel model, AuthService authService) {
         this.model = model;
         this.authService = authService;
     }
@@ -30,10 +30,22 @@ public class LoginController {
 
             authService.login(model.getUsername(), model.getPassword());
             log.info("Login successful!");
-            return true; 
+            return true;
         } catch (Exception e) {
             log.error("Error authenticating", e);
-            return false; 
+            return false;
         }
     }
+
+    public boolean logout() {
+        try {
+            authService.logout();
+            log.info("Logout successful!");
+            return true;
+        } catch (Exception e) {
+            log.error("Error authenticating", e);
+            return false;
+        }
+    }
+    
 }

@@ -1,11 +1,8 @@
 package com.teammanager.controller.employee;
 
 import java.time.LocalDate;
+import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -45,11 +42,8 @@ public class EmployeeController {
 
     @GetMapping()
     @PreAuthorize("hasAnyRole('ADMIN', 'HR', 'MANAGER')")
-    public Page<EmployeeDTO> getAllEmployees(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        Pageable pageable = PageRequest.of((page - 1), size, Sort.by("id").ascending());
-        return employeeService.getAllEmployees(pageable);
+    public List<EmployeeDTO> getAllEmployees() {
+        return employeeService.getAllEmployees();
     }
 
     @PostMapping
@@ -79,18 +73,14 @@ public class EmployeeController {
 
     @GetMapping("/search")
     @PreAuthorize("hasAnyRole('ADMIN', 'HR', 'MANAGER')")
-    public Page<EmployeeDTO> searchEmployees(
+    public List<EmployeeDTO> searchEmployees(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String fullName,
             @RequestParam(required = false) String jobTitle,
             @RequestParam(required = false) String department,
             @RequestParam(required = false) String employmentStatus,
             @RequestParam(required = false) LocalDate hireDateFrom,
-            @RequestParam(required = false) LocalDate hireDateTo,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
-        Pageable pageable = PageRequest.of((page - 1), size, Sort.by("id").ascending());
+            @RequestParam(required = false) LocalDate hireDateTo) {
 
         EmployeeCriteria criteria = new EmployeeCriteria();
         criteria.setId(id);
@@ -101,7 +91,7 @@ public class EmployeeController {
         criteria.setHireDateFrom(hireDateFrom);
         criteria.setHireDateTo(hireDateTo);
 
-        return employeeService.searchEmployees(pageable, criteria);
+        return employeeService.searchEmployees(criteria);
     }
 
 }

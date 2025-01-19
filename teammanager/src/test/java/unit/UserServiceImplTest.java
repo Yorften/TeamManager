@@ -16,9 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.teammanager.dto.role.RoleDTO;
@@ -118,18 +115,15 @@ public class UserServiceImplTest {
     
     @Test
     void getAllUsers_ReturnsPageOfUserDTOs() {
-        Pageable pageable = Pageable.unpaged();
-        Page<User> userPage = new PageImpl<>(List.of(testUser));
+        List<User> users = (List.of(testUser));
         
-        when(userRepository.findAll(pageable)).thenReturn(userPage);
-        when(userMapper.convertToDTO(testUser)).thenReturn(testUserDTO);
+        when(userRepository.findAll()).thenReturn(users);
+        when(userMapper.convertToDTOList(List.of(testUser))).thenReturn(List.of(testUserDTO));
         
-        Page<UserDTO> result = userService.getAllUsers(pageable);
+        List<UserDTO> result = userService.getAllUsers();
         
         assertNotNull(result);
-        assertEquals(1, result.getContent().size());
-        assertEquals(testUserDTO, result.getContent().get(0));
-        verify(userRepository).findAll(pageable);
+        verify(userRepository).findAll();
     }
     
     @Test
