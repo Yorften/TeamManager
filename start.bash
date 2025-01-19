@@ -40,9 +40,9 @@ delay=10
 
 while [ $retries -gt 0 ]; do
   db_status=$(docker inspect --format='{{.State.Health.Status}}' oracle-db 2>/dev/null)
-  app_status=$(docker inspect --format='{{.State.Health.Status}}' teammanager-app 2>/dev/null)
-
-  if [ "$db_status" == "healthy" ] && [ "$app_status" == "healthy" ]; then
+  app_status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8085/actuator/health)
+  
+  if [ "$db_status" == "healthy" ] && [ "$app_status" == "200" ]; then
     healthy=true
     break
   fi
@@ -60,4 +60,5 @@ fi
 echo "All containers are healthy!"
 
 # Start the Swing application
-java -jar ./teammanager-ui/target/teammanager-gui-1.0-SNAPSHOT-jar-with-dependencies.jar
+cd ./teammanager-ui
+java -jar ./target/teammanager-gui-1.0-SNAPSHOT-jar-with-dependencies.jar
