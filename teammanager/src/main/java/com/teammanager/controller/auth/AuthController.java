@@ -22,6 +22,11 @@ import com.teammanager.repository.TokenBlacklistRepository;
 import com.teammanager.service.interfaces.UserService;
 import com.teammanager.validation.UserValidationService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -35,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/auth")
 @AllArgsConstructor
 @Slf4j
+@Tag(name = "Authentication", description = "APIs for user authentication and account management")
 public class AuthController {
     private final UserValidationService userValidationService;
     private final UserService userService;
@@ -43,8 +49,14 @@ public class AuthController {
     private final JWTGenerator tokenGenerator;
     private final HttpServletRequest request;
 
+    @Operation(summary = "Login user", description = "Authenticates a user and generates a JWT token.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully authenticated"),
+            @ApiResponse(responseCode = "401", description = "Invalid credentials")
+    })
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> login(
+            @Parameter(description = "Login credentials: username and password", required = true) @RequestBody @Valid LoginRequest loginRequest) {
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginRequest.getUsername(),
@@ -62,8 +74,14 @@ public class AuthController {
         return new ResponseEntity<>(new AuthResponse(token), HttpStatus.OK);
     }
 
+    @Operation(summary = "Register user", description = "Registers a new user with the provided details.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "User successfully registered"),
+            @ApiResponse(responseCode = "400", description = "Invalid user data or validation error")
+    })
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody @Valid UserDTO userDTO) {
+    public ResponseEntity<String> register(
+            @Parameter(description = "User registration details: username, email, password, and role", required = true) @RequestBody @Valid UserDTO userDTO) {
 
         if (userValidationService.isUsernameTaken(userDTO.getUsername())) {
             log.info("Username is already taken");
@@ -85,8 +103,14 @@ public class AuthController {
         return ResponseEntity.ok("User registered successfully");
     }
 
+    @Operation(summary = "Logout user", description = "Invalidates the JWT token to log out the user.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Logout successful"),
+            @ApiResponse(responseCode = "400", description = "Invalid token")
+    })
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<String> logout(
+            @Parameter(description = "Authorization token to be invalidated", required = true) @RequestHeader("Authorization") String token) {
 
         String jwtToken = token.substring(7);
 
