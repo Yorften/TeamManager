@@ -11,8 +11,21 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+cd ../teammanager-ui
+
+echo "Building the Swing application..."
+mvn clean package -DskipTests
+
+# Check if the build was successful
+if [ $? -ne 0 ]; then
+  echo "Build failed. Exiting..."
+  exit 1
+fi
+
+cd ..
+
 echo "Starting the application with Docker Compose..."
-docker-compose up --build -d
+docker compose up --build -d
 
 if [ $? -ne 0 ]; then
   echo "Docker Compose failed. Exiting..."
