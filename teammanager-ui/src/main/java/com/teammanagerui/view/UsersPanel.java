@@ -63,13 +63,17 @@ public class UsersPanel extends JPanel {
     }
 
     private void populateTable(List<User> users) {
+        int i = 1;
+
         tableModel.setRowCount(0); // Clear existing data
         for (User user : users) {
             tableModel.addRow(new Object[] {
+                    i,
                     user.getUsername(),
                     user.getEmail(),
                     user.getRole().getName()
             });
+            i++;
         }
     }
 

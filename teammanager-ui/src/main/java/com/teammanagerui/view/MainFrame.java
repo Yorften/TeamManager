@@ -32,7 +32,6 @@ public class MainFrame extends JFrame {
 
         executor = Executors.newSingleThreadExecutor();
         initUI();
-        setLocationRelativeTo(null);
 
         // Show loading state and fetch user info
         fetchUserInfo();
@@ -40,8 +39,8 @@ public class MainFrame extends JFrame {
 
     private void initUI() {
         // Sidebar Panel with responsive layout
-        sidebarPanel = new JPanel(new MigLayout("fill, insets 10, gap 1", "[grow]", "[top][grow][]"));
-        sidebarPanel.setPreferredSize(new Dimension(getWidth()/4, getHeight()));
+        sidebarPanel = new JPanel(new MigLayout("fill, insets 10, gap 1", "[]", "[top][][]"));
+        sidebarPanel.setPreferredSize(new Dimension(getWidth() / 4, getHeight()));
         sidebarPanel.setBackground(Color.LIGHT_GRAY);
 
         // Content Panel with CardLayout
@@ -59,7 +58,7 @@ public class MainFrame extends JFrame {
 
     private void fetchUserInfo() {
         sidebarPanel.removeAll();
-        sidebarPanel.add(new JLabel("Loading..."), "center, grow");
+        sidebarPanel.add(new JLabel("Loading..."), "center");
         sidebarPanel.revalidate();
         sidebarPanel.repaint();
 
@@ -85,16 +84,13 @@ public class MainFrame extends JFrame {
         // Top navigation buttons
         JButton btnEmployees = new JButton("Employees");
         btnEmployees.addActionListener(e -> cardLayout.show(contentPanel, "Employees"));
-        sidebarPanel.add(btnEmployees, "growx, wrap, gapbottom 5");
+        sidebarPanel.add(btnEmployees, "growx, wrap");
 
         if (currentUser != null && currentUser.getRole().getName().equals("ROLE_ADMIN")) {
             JButton btnUsers = new JButton("Users");
             btnUsers.addActionListener(e -> cardLayout.show(contentPanel, "Users"));
-            sidebarPanel.add(btnUsers, "growx, wrap, gapbottom 5");
+            sidebarPanel.add(btnUsers, "growx, wrap");
         }
-
-        // Spacer between navigation and user info
-        sidebarPanel.add(new JPanel(), "grow, wrap");
 
         // User info section
         JPanel userInfoPanel = new JPanel(new MigLayout("fillx, insets 10, gap 5", "[][right]", "[]"));
