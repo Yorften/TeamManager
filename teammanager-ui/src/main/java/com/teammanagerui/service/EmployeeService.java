@@ -69,7 +69,7 @@ public class EmployeeService {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                throw new IOException("Failed to update employee: " + response.code());
+                throw new IOException("Failed to update employee: " + response.body().string());
             }
         }
     }

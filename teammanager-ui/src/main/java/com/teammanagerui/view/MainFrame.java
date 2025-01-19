@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import com.teammanagerui.controller.UserController;
 import com.teammanagerui.model.User;
+import com.teammanagerui.model.enums.Roles;
 import com.teammanagerui.service.UserService;
 import com.teammanagerui.utils.SessionManager;
 
@@ -24,7 +25,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         setTitle("Employee Management System");
-        setSize(800, 600);
+        setSize(1200, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         UserService userService = new UserService();
@@ -84,11 +85,16 @@ public class MainFrame extends JFrame {
         sidebarPanel.add(btnEmployees, "growx, wrap");
         contentPanel.add(new EmployeesPanel(), "Employees");
 
-        if (currentUser != null && currentUser.getRole().getName().equals("ROLE_ADMIN")) {
+        if (currentUser != null && currentUser.getRole().getName().equals(Roles.ROLE_ADMIN.name())) {
             JButton btnUsers = new JButton("Users");
             btnUsers.addActionListener(e -> cardLayout.show(contentPanel, "Users"));
             sidebarPanel.add(btnUsers, "growx, wrap");
             contentPanel.add(new UsersPanel(), "Users");
+
+            JButton btnAudit = new JButton("Logs");
+            btnAudit.addActionListener(e -> cardLayout.show(contentPanel, "Logs"));
+            sidebarPanel.add(btnAudit, "growx, wrap");
+            contentPanel.add(new LogPanel(), "Logs");
         }
 
 

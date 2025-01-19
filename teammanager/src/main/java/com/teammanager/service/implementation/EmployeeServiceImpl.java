@@ -62,14 +62,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeDTO> getAllEmployees() {
-        List<Employee> employees = employeeRepository.findAll();
+        List<Employee> employees = employeeRepository.findAllEmployees();
 
         return employeeMapper.convertToDTOList(employees);
     }
 
     @Override
     public List<EmployeeDTO> getAllEmployees(String... with) {
-        List<Employee> employees = employeeRepository.findAll();
+        List<Employee> employees = employeeRepository.findAllEmployees();
 
         return employeeMapper.convertToDTOList(employees, with);
     }
@@ -106,6 +106,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             User authUser = userRepository.findByUsername(authentication.getName())
                     .orElseThrow(() -> new ResourceNotFoundException("Authenticated user not found"));
 
+            log.info("auth id : " + authUser.getId());
             managerEmployee = employeeRepository.findByUserId(authUser.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Manager's employee details not found"));
 

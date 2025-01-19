@@ -36,7 +36,7 @@ import com.teammanager.model.enums.EmploymentStatus;
 @NoArgsConstructor
 @Builder
 @Entity(name = "employees")
-@SQLRestriction("removed_at IS NULL AND user_id is NULL")
+@SQLRestriction("removed_at IS NULL")
 @SQLDelete(sql = "UPDATE employees SET removed_at = CURRENT_TIMESTAMP WHERE id=?")
 public class Employee {
 

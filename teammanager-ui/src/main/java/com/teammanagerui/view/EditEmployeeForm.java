@@ -12,7 +12,9 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 import com.teammanagerui.model.Employee;
 import com.teammanagerui.model.enums.Department;
 import com.teammanagerui.model.enums.EmploymentStatus;
+import com.teammanagerui.model.enums.Roles;
 import com.teammanagerui.service.EmployeeService;
+import com.teammanagerui.utils.SessionManager;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -46,19 +48,21 @@ public class EditEmployeeForm extends JDialog {
         txtFullName = new JTextField(employee.getFullName(), 20);
         txtJobTitle = new JTextField(employee.getJobTitle(), 20);
         cmbDepartment = new JComboBox<>(Department.values());
-        cmbDepartment.setSelectedItem(employee.getDepartment());
+        cmbDepartment.setSelectedItem(Department.valueOf(employee.getDepartment()));
         cmbEmploymentStatus = new JComboBox<>(EmploymentStatus.values());
-        cmbEmploymentStatus.setSelectedItem(employee.getEmploymentStatus());
+        cmbEmploymentStatus.setSelectedItem(employee.getEmploymentStatus()  );
         datePickerHireDate.setDate(employee.getHireDate());
         txtContactInfo = new JTextField(employee.getContactInformation(), 20);
         txtAddress = new JTextField(employee.getAddress(), 20);
 
-        add(new JLabel("Full Name:"), "wrap");
-        add(txtFullName, "growx, wrap");
-        add(new JLabel("Job Title:"), "wrap");
-        add(txtJobTitle, "growx, wrap");
-        add(new JLabel("Department:"), "wrap");
-        add(cmbDepartment, "growx, wrap");
+        if(!SessionManager.getUser().getRole().getName().equals(Roles.ROLE_MANAGER.name())){
+            add(new JLabel("Full Name:"), "wrap");
+            add(txtFullName, "growx, wrap");
+            add(new JLabel("Job Title:"), "wrap");
+            add(txtJobTitle, "growx, wrap");
+            add(new JLabel("Department:"), "wrap");
+            add(cmbDepartment, "growx, wrap");
+        }
         add(new JLabel("Employment Status:"), "wrap");
         add(cmbEmploymentStatus, "growx, wrap");
         add(new JLabel("Hire Date (YYYY-MM-DD):"), "wrap");
@@ -71,9 +75,11 @@ public class EditEmployeeForm extends JDialog {
         JButton btnSubmit = new JButton("Submit");
         btnSubmit.addActionListener(e -> handleSubmit());
         add(btnSubmit, "span, growx, align center");
-        JButton btnDelete = new JButton("Delete");
-        btnDelete.addActionListener(e -> handleDelete());
-        add(btnDelete, "span, growx, align center");
+        if(!SessionManager.getUser().getRole().getName().equals(Roles.ROLE_MANAGER.name())){  
+            JButton btnDelete = new JButton("Delete");
+            btnDelete.addActionListener(e -> handleDelete());
+            add(btnDelete, "span, growx, align center");
+        }
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }

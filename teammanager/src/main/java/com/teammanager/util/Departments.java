@@ -5,6 +5,7 @@ public enum Departments {
     FINANCE,
     MARKETING,
     SALES,
+    MANAGEMENT,
     IT,
     OPERATIONS,
     LEGAL,
