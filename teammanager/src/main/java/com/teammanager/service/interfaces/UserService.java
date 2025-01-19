@@ -1,7 +1,6 @@
 package com.teammanager.service.interfaces;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
 
 import com.teammanager.dto.user.UpdateUserDTO;
 import com.teammanager.dto.user.UserDTO;
@@ -18,9 +17,11 @@ public interface UserService {
 
     public UserDTO getByUserName(String userName);
 
-    Page<UserDTO> getAllUsers(Pageable pageable);
+    public UserDTO getByUserName(String userName, String... with);
 
-    Page<UserDTO> getAllUsers(Pageable pageable, String... with);
+    List<UserDTO> getAllUsers();
+
+    List<UserDTO> getAllUsers(String... with);
 
     UserDTO addUser(UserDTO User);
 

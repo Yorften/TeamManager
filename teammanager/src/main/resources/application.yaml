@@ -17,3 +17,4 @@ spring:
     active: ${SPRING_PROFILES_ACTIVE:prod}
   jackson:
     default-property-inclusion: NON_NULL
+

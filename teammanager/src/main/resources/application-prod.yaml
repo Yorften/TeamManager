@@ -4,7 +4,7 @@ spring:
       on-profile: prod
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:oracle:thin:@oracle-db:1521/XEPDB1}
+    url: ${SPRING_DATASOURCE_URL:jdbc:oracle:thin:@localhost:1521/XEPDB1}
     username: ${SPRING_DATASOURCE_USERNAME:hr_admin}
     password: ${SPRING_DATASOURCE_PASSWORD:password}
     driver-class-name: oracle.jdbc.OracleDriver
@@ -14,6 +14,6 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     show-sql: true
     database-platform: org.hibernate.dialect.OracleDialect

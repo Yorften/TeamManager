@@ -36,6 +36,8 @@ public class EmployeeSpecification {
                         builder.between(root.get("hireDate"), criteria.getHireDateFrom(), criteria.getHireDateTo()));
             }
 
+            predicates.add(builder.isNull(root.get("user")));
+
             return builder.and(predicates.toArray(new Predicate[0]));
         };
     }
