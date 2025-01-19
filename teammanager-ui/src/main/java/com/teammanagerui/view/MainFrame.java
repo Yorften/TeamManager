@@ -48,9 +48,6 @@ public class MainFrame extends JFrame {
         cardLayout = new CardLayout();
         contentPanel.setLayout(cardLayout);
 
-        // Add content panels
-        contentPanel.add(new EmployeesPanel(), "Employees");
-        contentPanel.add(new UsersPanel(), "Users");
 
         add(sidebarPanel, BorderLayout.WEST);
         add(contentPanel, BorderLayout.CENTER);
@@ -85,12 +82,15 @@ public class MainFrame extends JFrame {
         JButton btnEmployees = new JButton("Employees");
         btnEmployees.addActionListener(e -> cardLayout.show(contentPanel, "Employees"));
         sidebarPanel.add(btnEmployees, "growx, wrap");
+        contentPanel.add(new EmployeesPanel(), "Employees");
 
         if (currentUser != null && currentUser.getRole().getName().equals("ROLE_ADMIN")) {
             JButton btnUsers = new JButton("Users");
             btnUsers.addActionListener(e -> cardLayout.show(contentPanel, "Users"));
             sidebarPanel.add(btnUsers, "growx, wrap");
+            contentPanel.add(new UsersPanel(), "Users");
         }
+
 
         // User info section
         JPanel userInfoPanel = new JPanel(new MigLayout("fillx, insets 10, gap 5", "[][right]", "[]"));
