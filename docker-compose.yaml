@@ -1,0 +1,45 @@
+services:
+  teammanager-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: teammanager-app
+    ports:
+      - "8085:8085"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@oracle-db:1521/freepdb1
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      SPRING_JWT_TOKEN: ${SPRING_JWT_TOKEN}
+      SPRING_JWT_EXPIRATION: ${SPRING_JWT_EXPIRATION}
+    volumes:
+      - ./logs:/teammanager/logs
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  oracle-db:
+    image: gvenzl/oracle-free
+    container_name: oracle-db
+    environment:
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD}
+      APP_USER: ${SPRING_DATASOURCE_USERNAME}
+      APP_USER_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    ports:
+      - "1521:1521"
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: always
+
+volumes:
+  oracle-data:
+
+  
