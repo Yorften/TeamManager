@@ -1,70 +1,63 @@
 package com.teammanagerui.view;
 
 import com.teammanagerui.controller.LoginController;
+import com.teammanagerui.model.LoginModel;
+import com.teammanagerui.service.AuthService;
+
 import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
-import java.awt.*;
 
 public class LoginFrame extends JFrame {
+    private JTextField txtUsername;
+    private JPasswordField txtPassword;
+    private JButton btnLogin;
+
     private final LoginController controller;
-    private final JTextField usernameField;
-    private final JPasswordField passwordField;
 
     public LoginFrame() {
-        controller = new LoginController();
-        
-        // Frame setup
-        setTitle("Employee Management System - Login");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setMinimumSize(new Dimension(400, 200));
-        setLocationRelativeTo(null);
+        // Create model, service, and controller
+        LoginModel model = new LoginModel();
+        AuthService authService = new AuthService();
+        this.controller = new LoginController(model, authService);
 
-        // Create components
-        usernameField = new JTextField(20);
-        passwordField = new JPasswordField(20);
-        JButton loginButton = new JButton("Login");
-
-        // Layout setup
-        JPanel mainPanel = new JPanel(new MigLayout("fillx, insets 20", "[right][grow]"));
-        
-        // Add components
-        mainPanel.add(new JLabel("Username:"), "");
-        mainPanel.add(usernameField, "growx, wrap");
-        mainPanel.add(new JLabel("Password:"), "");
-        mainPanel.add(passwordField, "growx, wrap");
-        mainPanel.add(loginButton, "skip, right, wrap");
-
-        // Add action listener
-        loginButton.addActionListener(e -> handleLogin());
-
-        // Final setup
-        add(mainPanel);
-        pack();
+        initUI();
     }
 
-    private void handleLogin() {
-        String username = usernameField.getText();
-        String password = new String(passwordField.getPassword());
+    private void initUI() {
+        setTitle("Login");
+        setSize(400, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new MigLayout("", "[][]", "[][][]"));
 
-        if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                "Username and password are required",
-                "Login Error",
-                JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        add(new JLabel("Username:"));
+        txtUsername = new JTextField(20);
+        add(txtUsername, "wrap");
 
-        if (controller.authenticate(username, password)) {
-            JOptionPane.showMessageDialog(this,
-                "Login successful!",
-                "Success",
-                JOptionPane.INFORMATION_MESSAGE);
-            // TODO: Open main application window
+        add(new JLabel("Password:"));
+        txtPassword = new JPasswordField(20);
+        add(txtPassword, "wrap");
+
+        btnLogin = new JButton("Login");
+        add(btnLogin, "span, align center");
+
+        btnLogin.addActionListener(e -> onLoginClick());
+        setLocationRelativeTo(null);
+    }
+
+    private void onLoginClick() {
+        controller.getModel().setUsername(txtUsername.getText());
+        controller.getModel().setPassword(new String(txtPassword.getPassword()));
+
+        if (controller.login()) {
+            // Close login frame and open main application frame To-DO
+            dispose();
+            new MainFrame().setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(this,
-                "Invalid credentials",
-                "Login Error",
-                JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Invalid username or password.",
+                    "Login Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }

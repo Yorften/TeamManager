@@ -1,7 +1,9 @@
 package com.teammanagerui;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import com.teammanagerui.utils.SessionManager;
 import com.teammanagerui.view.LoginFrame;
+import com.teammanagerui.view.MainFrame;
 
 import javax.swing.*;
 
@@ -16,8 +18,12 @@ public class TeamManagerGUI {
         }
 
         SwingUtilities.invokeLater(() -> {
-            LoginFrame loginFrame = new LoginFrame();
-            loginFrame.setVisible(true);
+            if (SessionManager.isLoggedIn()) {
+                new MainFrame().setVisible(true);
+            } else {
+                new LoginFrame().setVisible(true);
+            }
         });
+
     }
 }
